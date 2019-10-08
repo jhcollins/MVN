@@ -27,11 +27,11 @@ button.pack()
 #Rainfall Tool Begin#
 
 sys.path.insert(2,'.\precipitation\predicted')
-#import rainfall_pred as pcip
+import rainfall_pred1 as prcp
 rainfall = ttk.Frame(tabControl)            # Create rainfall tab instance 
 tabControl.add(rainfall, text='rainfall')      # Add the tab
 tabControl.pack(expand=1, fill="both")  # Pack to make visible
-button2 = tk.Button(rainfall, text='Rainfall', width=25, command=m.destroy) # adding button to rainfall tab
+button2 = tk.Button(rainfall, text='Rainfall', width=25, command=lambda : prcp.run_precip(30,-90,'all','24-hr')) # adding button to rainfall tab
 button2.pack()
 
 #Rainfall Tool end#
