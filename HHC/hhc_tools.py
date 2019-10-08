@@ -2,10 +2,10 @@
 
 #import background python modules#
 import sys
-import numpy as np
+#import numpy as np
 import tkinter as tk
 from tkinter import ttk
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 #-------------------------#
 m=tk.Tk()                            # Create instance for master window     
