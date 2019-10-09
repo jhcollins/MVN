@@ -8,19 +8,6 @@ import numpy as np
 import urllib
 import sys
 import csv
-#import PyQt5 as pyqt
-
-#-----------------------------#
-#import ssl
-#from functools import wraps
-#def sslwrap(func):
-#    @wraps(func)
-#    def bar(*args, **kw):
-#        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-#        return func(*args, **kw)
-#    return bar
-
-#ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 
 #-----------------------------#
 fm_int=[1,2,3,6,12,24,36,72,144,288,576,864,1152,2016,2880,5760,8640,12960,17280]
@@ -31,14 +18,14 @@ rain_int=[]
 rain_dist=[]
 time_series=[]
 
-lat=float(raw_input("Latitude in decimal degrees? "))
-lon=float(raw_input("Longitude in decimal degrees? "))
+lat=30#float(raw_input("Latitude in decimal degrees? "))
+lon=-90#float(raw_input("Longitude in decimal degrees? "))
 lat=(str("%.4f" % lat))
 lon=(str("%.4f" % lon))
-ari=str(raw_input("Return period years?(1,2,5,10,etc.. or all) "))
-dur=str(raw_input("Storm duration?(5-min,1-hr,2-day, etc...) "))
+ari="all"#str(raw_input("Return period years?(1,2,5,10,etc.. or all) "))
+dur="24-hr"#str(raw_input("Storm duration?(5-min,1-hr,2-day, etc...) "))
 
-urllib.urlretrieve('https://hdsc.nws.noaa.gov/cgi-bin/hdsc/new/fe_text_mean.csv?lat='+lat+'&lon='+lon+'&data=depth&units=english&series=pds', 'rainfall_data.csv');
+urllib.request.urlretrieve('https://hdsc.nws.noaa.gov/cgi-bin/hdsc/new/fe_text_mean.csv?lat='+lat+'&lon='+lon+'&data=depth&units=english&series=pds', 'rainfall_data.csv');
 #request.get('https://hdsc.nws.noaa.gov/cgi-bin/hdsc/new/fe_text_mean.csv?lat='+lat+'&lon='+lon+'&data=depth&units=english&series=pds', 'rainfall_data.csv');
 with open('rainfall_data.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
