@@ -6,6 +6,8 @@ import sys
 import csv
 
 def run_precip(lat,lon,ari,dur):
+    global list_return
+    global hrs
     fm_int=[1,2,3,6,12,24,36,72,144,288,576,864,1152,2016,2880,5760,8640,12960,17280]
     duration_list=[]
     ARI_list=[]
@@ -67,9 +69,11 @@ def run_precip(lat,lon,ari,dur):
                 else:
                     time_series.insert(0,rain_dist[i])
             time_series_all.append(time_series)    
-            plt.plot(range(fm_int[int(dur1-1)]),time_series)
+            #plt.plot(range(fm_int[int(dur1-1)]),time_series)
 
-        plt.show()
+        #plt.show()
+        hrs=range(fm_int[int(dur1-1)])
+        list_return=time_series_all
         tsa=np.array(time_series_all)
         tsa=np.transpose(tsa)
         np.savetxt("rainfall_timeseries_all.csv", tsa, delimiter=",")
@@ -99,10 +103,11 @@ def run_precip(lat,lon,ari,dur):
                 time_series.append(rain_dist[i])
             else:
                 time_series.insert(0,rain_dist[i])
-
+                
+        hrs=range(fm_int[int(dur1-1)])
         ts=np.array(time_series)
         ts=np.transpose(ts)
         np.savetxt("rainfall_timeseries.csv", ts, delimiter=",")
-
-        plt.plot(range(fm_int[int(dur1-1)]),time_series)
-        plt.show()
+        list_return=time_series
+        #plt.plot(range(fm_int[int(dur1-1)]),time_series)
+        #plt.show()
