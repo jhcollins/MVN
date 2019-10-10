@@ -28,6 +28,7 @@ from PIL import Image, ImageTk # pip install_pillow
 import warnings
 import tkinter.messagebox
 import time
+import os
 
 
 # ## Define Function for overtopping calculation
@@ -332,8 +333,13 @@ def OT(numsim,calc_method,file_in,file_out):
         plt.tight_layout()
         dd = '00' + str(f)
 
+        # Add plots to plots/ directory
         ntpath.dirname(file_out)
-        plt.savefig(path_out + "/plots/" + dd[-1:] + "_" + str(SecN[f]) + "_Design.png")#,format = 'png')
+        try:
+            plt.savefig(path_out + "/plots/" + dd[-1:] + "_" + str(SecN[f]) + "_Design.png")#,format = 'png')
+        except: 
+            os.mkdir(path_out + "/plots/")
+            plt.savefig(path_out + "/plots/" + dd[-1:] + "_" + str(SecN[f]) + "_Design.png")#,format = 'png')
         plt.show() # must come after save or file will save as blank image
         plt.close()
 
