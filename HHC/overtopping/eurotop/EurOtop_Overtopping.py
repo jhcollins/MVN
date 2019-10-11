@@ -17,17 +17,8 @@ from pandas import DataFrame#, read_csv
 import matplotlib.pyplot as plt
 import pandas as pd 
 from scipy.stats import norm
-# Import libraries
-import ipywidgets as widgets
-from ipywidgets.widgets import *
 from IPython.display import display
-from tkinter import filedialog
-from tkinter import *
-from tkinter.ttk import Progressbar
-from PIL import Image, ImageTk # pip install_pillow
 import warnings
-import tkinter.messagebox
-import time
 import os
 
 
