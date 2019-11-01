@@ -44,6 +44,11 @@ def get_ms_fcst(file_out5,file_out28,today_date):
                 next
             elif list_5day[i][1] == '':
                 next
+            elif list_5day[i][0] == 'STATION':
+                next    
+            elif list_5day[i][0] == 'STG':
+                list_5day[i].insert(0,'')
+                list_5day[i].insert(1,'')
             elif list_5day[i][1].isnumeric():
                 list_5day[i][1] = list_5day[i][1]
             elif list_5day[i][1].isalpha():
@@ -60,6 +65,8 @@ def get_ms_fcst(file_out5,file_out28,today_date):
             if list_5day[i][0] == '':
                 next
             elif list_5day[i][1] == '':
+                next
+            elif list_5day[i][0] == 'STATION':
                 next
             elif list_5day[i][1] == 'TDA':
                 next
@@ -104,7 +111,7 @@ def get_ms_fcst(file_out5,file_out28,today_date):
         os.mkdir(ntpath.split(path_out5)[0])
     except:
         pass
-
+    
     try:
         os.mkdir(path_out5) # create path for today (if not previously created)
         pd.DataFrame.to_csv(fcst_5day, path_out5 + "\\" +  "test_FORECAST_" + today_date + ".csv")
@@ -113,6 +120,10 @@ def get_ms_fcst(file_out5,file_out28,today_date):
 
     # Save 28-day forecast file 
     path_out28 = ntpath.dirname(file_out28)
+    try: # Create year directory if not done so (really should only be an issue once per year)
+        os.mkdir(ntpath.split(path_out28)[0])
+    except:
+        pass
     try:
         os.mkdir(path_out28) # create path for today (if not previously created)
         pd.DataFrame.to_csv(fcst_28day, path_out28 + "\\" + "test_24hr change NWS_" + today_date + ".csv", date_format='%mm-%dd-%YY')
@@ -203,6 +214,12 @@ def get_ms_fcst(file_out5,file_out28,today_date):
 
 
 # In[14]:
+
+
+
+
+
+# In[1]:
 
 
 
