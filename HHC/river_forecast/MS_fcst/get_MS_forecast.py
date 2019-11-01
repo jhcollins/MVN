@@ -99,6 +99,12 @@ def get_ms_fcst(file_out5,file_out28,today_date):
     # Save 5-day forecast file 
     import ntpath
     path_out5 = ntpath.dirname(file_out5)
+    
+    try: # Create year directory if not done so (really should only be an issue once per year)
+        os.mkdir(ntpath.split(path_out5)[0])
+    except:
+        pass
+
     try:
         os.mkdir(path_out5) # create path for today (if not previously created)
         pd.DataFrame.to_csv(fcst_5day, path_out5 + "\\" +  "test_FORECAST_" + today_date + ".csv")
