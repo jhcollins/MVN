@@ -15,7 +15,7 @@ def path_write(path,string):
 def crms_set_projection():
     global vv_locations
     print("converting CRMS coordinate to RAS projection")
-    os.system('cmd /k "C:\Python27\ArcGIS10.2\python.exe projection.py"')
+    os.system('cmd /k "C:\Python27\ArcGIS10.2\python.exe .\\ras_tools\\vv_tool\\projection.py"')
     vv_locations=np.loadtxt(".\\ras_tools\\vv_tool\\test_1.txt",delimiter=',',dtype='str')
     print("done!")
     
