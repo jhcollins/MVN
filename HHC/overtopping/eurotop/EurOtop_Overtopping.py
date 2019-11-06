@@ -17,17 +17,8 @@ from pandas import DataFrame#, read_csv
 import matplotlib.pyplot as plt
 import pandas as pd 
 from scipy.stats import norm
-# Import libraries
-import ipywidgets as widgets
-from ipywidgets.widgets import *
 from IPython.display import display
-from tkinter import filedialog
-from tkinter import *
-from tkinter.ttk import Progressbar
-from PIL import Image, ImageTk # pip install_pillow
 import warnings
-import tkinter.messagebox
-import time
 import os
 
 
@@ -208,6 +199,7 @@ def OT(numsim,calc_method,file_in,file_out):
         berm = DesI['BermElevation'][f] # values[f,16]  # berm elevation 
         BR = 0.4 # breaker parameter over berm
         DH = (round((swl))) # set initial design height to swl + hs. Program will loop until DS is reached.
+        
         # initialize overtopping values so that while loop will begin
         q50 = 1
         q90 = 1
@@ -318,10 +310,6 @@ def OT(numsim,calc_method,file_in,file_out):
             plt.text(-4,Yscale - 0.80*Yscale, 'Roughness Factor = ' + str(gf),fontsize=10);
             plt.text(-4,Yscale - 0.90*Yscale, 'Wave Angle Factor = ' + str(gB),fontsize=10);
         else:
-        #plt.text(-4,Yscale-.60*Yscale,['Slope = floodwall']);
-        #plt.text(-4,Yscale-.70*Yscale,['Berm Factor = floodwall']);
-        #plt.text(-4,Yscale-.80*Yscale,['Roughness Factor = floodwall']);
-        #plt.text(-4,Yscale-.80*Yscale,['Wave Angle Factor = ',str(gB)],fontsize=8);
             plt.text(-4,Yscale-0.9*Yscale,'Vertical Wall Factor = ' + str(gv), fontsize=8)
 
         plt.text(70, Yscale - 0.07*Yscale, 'Hydraulic design characteristics',fontsize=10, weight="bold")
@@ -356,6 +344,7 @@ def OT(numsim,calc_method,file_in,file_out):
     
     ## Save output dataframe into CSV
     fname = file_out #root.filename #dum.value
+    DataFrame.to_csv(DesI,fname)
 
     print("Saved!")
 
