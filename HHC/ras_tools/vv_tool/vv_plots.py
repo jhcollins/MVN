@@ -5,7 +5,7 @@ import sys
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 
-abs_path=sys.path[0]
+abs_path_vv_plots=sys.path[0]
 
 def path_write(path,string):
     with open(path, 'w') as the_file:
@@ -16,7 +16,7 @@ def crms_set_projection():
     global vv_locations
     print("converting CRMS coordinate to RAS projection")
     os.system('cmd /k "C:\Python27\ArcGIS10.2\python.exe projection.py"')
-    vv_locations=np.loadtxt(abs_path+"//test_1.txt",delimiter=',',dtype='str')
+    vv_locations=np.loadtxt(".\\ras_tools\\vv_tool\\test_1.txt",delimiter=',',dtype='str')
     print("done!")
     
 def read_ras(hdf):
@@ -75,7 +75,8 @@ def vv_plots(crms_ras_xy,crms_ras_swl,locations,CRMS,output_dir):
                                               method='nearest'))
         plt.figure()
         plt.ylim(0.0, 5.0) 
-        plt.plot(crms_ras_swl[:,vv_locations_indices[i]])
-        plt.plot(np.array(CRMS_gauge_results)[i,:])
+        plt.plot(crms_ras_swl[:,vv_locations_indices[i]],'b',label='Modeled')
+        plt.plot(np.array(CRMS_gauge_results)[i,:],'k',label='Observed')
+        plt.legend()
         plt.savefig(output_dir+'\\vv_'+str(i)+'.png')
-        plt.show()
+        #plt.show()

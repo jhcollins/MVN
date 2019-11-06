@@ -6,16 +6,16 @@ arcpy.env.overwriteOutput = True
 print("Done!")
 
 #wrkdir=os.getcwd()
-abs_path=sys.path[0]
-
+abs_path_projection=sys.path[0]
+print(abs_path_projection)
 def get_prj():
-    prj_ = open(abs_path+'\\prj_path.txt',"r+")
+    prj_ = open('.\\ras_tools\\vv_tool\\prj_path.txt',"r+")
     prj_path=prj_.readline()
     prj_.close()
     return prj_path
 
 def get_inputs():
-    inputs_ = open(abs_path+'\\inputs_path.txt',"r+")
+    inputs_ = open('.\\ras_tools\\vv_tool\\inputs_path.txt',"r+")
     inputs_path=inputs_.readline()
     inputs_.close()
     return inputs_path
