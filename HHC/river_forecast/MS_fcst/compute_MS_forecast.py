@@ -3,10 +3,10 @@
 
 # ## Gets River Forecast Data (5- and 28- Day)
 
-# In[1]:
+# In[3]:
 
 
-def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_NO,nws_21_RR,file_out5,file_out28,today_date):
+def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_NO,nws_21_RR,file_out5,file_out28,today_date,fcst_num):
     import requests as req
     import urllib.request as urlreq
     import time
@@ -75,16 +75,16 @@ def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_
             plt.ylim((10, 20))
             plt.hlines(11, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
             plt.hlines(15, dates_pred21[0],dates_pred21[-1], colors = 'g') # Stage 2 Flood Marker
-            plt.legend(['NWS Stage (ft)','Phase 1','Phase 2'],loc="lower left")
+            plt.legend(['NWS Stage (ft)','Phase 1 (11 ft)','Phase 2 (15 ft)'],loc="lower left")
         elif np.max(nws_21_NO) >= 10 and np.max(nws_21_NO) < 14:
             plt.ylim((6, 16))
             plt.hlines(11, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
             plt.hlines(15, dates_pred21[0],dates_pred21[-1], colors = 'g') # Stage 2 Flood Marker
-            plt.legend(['NWS Stage (ft)','Phase 1','Phase 2'],loc="lower left")
+            plt.legend(['NWS Stage (ft)','Phase 1 (11 ft)','Phase 2 (15 ft)'],loc="lower left")
         elif np.max(nws_21_NO) < 10:
             plt.ylim((2, 12))
             plt.hlines(11, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
-            plt.legend(['NWS Stage (ft)','Phase 1'],loc="lower left")
+            plt.legend(['NWS Stage (ft)','Phase 1 (11 ft)'],loc="lower left")
 
         plt.xlim((dates_pred21[0],dates_pred21[-1]))
         plt.hlines(11, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
@@ -108,7 +108,7 @@ def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_
         
         # MISSISSIPPI RIVER AT RED RIVER LANDING 21-DAY FORECAST TABLE
         #pre-allocate stages
-        stage_rr = np.zeros(21)
+        stage_rr = list(fcst_rrl_adjusted) #np.zeros(21)
         flow_rr = np.zeros(21)
 
         fcst_hdr = ["Date","Stage","Flow"] # column headers
@@ -124,29 +124,39 @@ def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_
         ax_NO2
         plt.plot_date(dates_pred21,fcst_rrl_adjusted,fmt='-o',xdate=True,ydate=False)
         plt.plot_date(dates_pred21,nws_21_RR,fmt='--', color='purple',xdate=True,ydate=False)
+        
         # Add condtionals for the y-limits to adjust for scaling
-        if np.max(nws_21_RR) >= 55:
-            plt.ylim((45, 65))
-            plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
-            plt.hlines(56, dates_pred21[0],dates_pred21[-1], colors = 'g') # Stage 1 Flood Marker
-            plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1','Phase 2'],loc="lower left")
-        elif np.max(nws_21_RR) >= 45 and np.max(nws_21_RR) < 55:
-            plt.ylim((40, 60))
-            plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
-            plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1'],loc="lower left")
-        elif np.max(nws_21_RR) >= 35 and np.max(nws_21_RR) < 45:
-            plt.ylim((30, 50))
-            plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
-            plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1'],loc="lower left")
-        elif np.max(nws_21_RR) >= 25 and np.max(nws_21_RR) < 35:
-            plt.ylim((20, 40))
-            plt.legend(['USACE Stage (ft)','NWS Stage (ft)'],loc="lower left")
-        elif np.max(nws_21_RR) >= 15 and np.max(nws_21_RR) < 25:
-            plt.ylim((10, 30))
-            plt.legend(['USACE Stage (ft)','NWS Stage (ft)'],loc="lower left")        
-        elif np.max(nws_21_RR) < 15:
-            plt.ylim((0, 20))
-            plt.legend(['USACE Stage (ft)','NWS Stage (ft)'],loc="lower left") 
+        # round to 0 or 5
+        def myround(x, base=5):
+            return base * round(x/base)
+        ## way to automatically find ylimits
+        find_ylim = myround(np.max([nws_21_RR,fcst_rrl_adjusted]))
+        plt.ylim((find_ylim-15,find_ylim+5))
+        plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
+        plt.hlines(56, dates_pred21[0],dates_pred21[-1], colors = 'g') # Stage 1 Flood Marker
+        plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1 (48 ft)','Phase 2 (56 ft)'],loc="lower left")        
+#         if np.max(nws_21_RR) >= 55:
+#             plt.ylim((45, 65))
+#             plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
+#             plt.hlines(56, dates_pred21[0],dates_pred21[-1], colors = 'g') # Stage 1 Flood Marker
+#             plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1','Phase 2'],loc="lower left")
+#         elif np.max(nws_21_RR) >= 45 and np.max(nws_21_RR) < 55:
+#             plt.ylim((40, 60))
+#             plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
+#             plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1'],loc="lower left")
+#         elif np.max(nws_21_RR) >= 35 and np.max(nws_21_RR) < 45:
+#             plt.ylim((30, 50))
+#             plt.hlines(48, dates_pred21[0],dates_pred21[-1], colors = 'r') # Stage 1 Flood Marker
+#             plt.legend(['USACE Stage (ft)','NWS Stage (ft)','Phase 1'],loc="lower left")
+#         elif np.max(nws_21_RR) >= 25 and np.max(nws_21_RR) < 35:
+#             plt.ylim((20, 40))
+#             plt.legend(['USACE Stage (ft)','NWS Stage (ft)'],loc="lower left")
+#         elif np.max(nws_21_RR) >= 15 and np.max(nws_21_RR) < 25:
+#             plt.ylim((10, 30))
+#             plt.legend(['USACE Stage (ft)','NWS Stage (ft)'],loc="lower left")        
+#         elif np.max(nws_21_RR) < 15:
+#             plt.ylim((0, 20))
+#             plt.legend(['USACE Stage (ft)','NWS Stage (ft)'],loc="lower left") 
 
         plt.xlim((dates_pred21[0],dates_pred21[-1]))
         plt.gca().set
@@ -172,16 +182,16 @@ def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_
         daysofweek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] # set list of days of week for changing forecast to loop through
         weekday_pred = [daysofweek[get_wkday[y-1]] for y in get_wkday] # this is what goes in table
 
-        cairo_pred = np.zeros(num_pred)
-        arkcity_pred = np.zeros(num_pred)
-        vicks_pred = np.zeros(num_pred)
-        natchez_pred = np.zeros(num_pred)
-        knox_pred = np.zeros(num_pred)
-        rr_ldg_pred = np.zeros(num_pred)
-        br_pred = np.zeros(num_pred)
-        dville_pred = np.zeros(num_pred)
-        reserve_pred = np.zeros(num_pred)
-        no_pred = np.zeros(num_pred)
+        cairo_pred = ['']*num_pred#np.zeros(num_pred)
+        arkcity_pred = ['']*num_pred#np.zeros(num_pred)
+        vicks_pred = ['']*num_pred#np.zeros(num_pred)
+        natchez_pred = ['']*num_pred#np.zeros(num_pred)
+        knox_pred = ['']*num_pred#np.zeros(num_pred)
+        rr_ldg_pred = fcst_rrl_adjusted[0:num_pred]#np.zeros(num_pred)
+        br_pred = ['']*num_pred#np.zeros(num_pred)
+        dville_pred = ['']*num_pred#np.zeros(num_pred)
+        reserve_pred = ['']*num_pred#np.zeros(num_pred)
+        no_pred = ['']*num_pred#np.zeros(num_pred)
 
         pred_data = list(zip(weekday_pred,cairo_pred,arkcity_pred,vicks_pred,natchez_pred,knox_pred,
                 rr_ldg_pred,br_pred,dville_pred,reserve_pred,no_pred))
@@ -195,7 +205,7 @@ def compute_USACE_MS_forecast(fcst_rrl_adjusted,time_pred21,dates_pred21,nws_21_
         plt.close()
 
 
-# In[1]:
+# In[2]:
 
 
 
