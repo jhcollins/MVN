@@ -19,9 +19,10 @@ def run_precip(lat,lon,ari,dur):
     lon=(str("%.4f" % lon))
     urllib.request.urlretrieve('https://hdsc.nws.noaa.gov/cgi-bin/hdsc/new/fe_text_mean.csv?lat='+lat+'&lon='+lon+'&data=depth&units=english&series=pds', 'rainfall_data.csv');
 
-    with open('rainfall_data.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        rawdata=[]
+    with open('rainfall_data.csv', 'rb') as csv_file:
+        lines = [line.decode('latin-1') for line in csv_file.readlines()]
+        csv_reader = csv.reader(lines, delimiter=',')
+        rawdata = []
         for row in csv_reader:
             rawdata.append(row)
 
